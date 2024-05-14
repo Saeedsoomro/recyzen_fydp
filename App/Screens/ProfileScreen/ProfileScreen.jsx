@@ -1,35 +1,65 @@
-import { View, Text, Image } from 'react-native'
-import React from 'react'
+import { View, Text, Image, Modal } from 'react-native'
+import React, { useState } from 'react'
 import { Ionicons } from '@expo/vector-icons'; 
 import { useUser } from '@clerk/clerk-expo';
 import Colors from './../../Utils/Colors'
 import { FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native';
+import EditUserProfile from './EditUserProfile';
+import EditUserAddress from './EditUserAddress';
 export default function ProfileScreen() {
- 
+  const [openEditProfileModal, setOpenEditProfileModal] = useState(false)
+  const [openEditAddressModal, setOpenEditAddressModal] = useState(false)
   const {user}=useUser();
  const profileMenu=[
   {
     id:1,
     name:'Home',
-    icon:'home'
+    icon:'home',
+    action:'home'
   },
   {
     id:2,
+    name:'Edit profile',
+    icon:'person',
+    action:'editProfile'
+  },
+  {
+    id:3,
+    name:'Edit Address',
+    icon:'location',
+    action:'location'
+  },
+  {
+    id:4,
     name:'My Booking',
-    icon:'bookmark-sharp'
+    icon:'bookmark-sharp',
+    action:'booking'
   },
   {
-    id:3,
-    name:'Contact Us',
-    icon:'mail'
+    id:5,
+    name:'Support',
+    icon:'call',
+    action:'support'
+    
   },
+ 
   {
-    id:3,
+    id:6,
     name:'Logout',
-    icon:'log-out'
+    icon:'log-out',
+    action:'logout'
   }
  ]
+
+ function handleProfileItemClick(action){
+    if(action === "editProfile"){
+      setOpenEditProfileModal(true)
+    }
+    if(action === "location"){
+      setOpenEditAddressModal(true)
+    }
+ }
   return (
     <View>
     <View style={{padding:20,paddingTop:30, backgroundColor:Colors.PRIMARY}}>
@@ -51,21 +81,38 @@ export default function ProfileScreen() {
       </View>
     </View>
 
-    <View style={{paddingTop:60}}>
+    <View style={{paddingTop:40}}>
       <FlatList
       data={profileMenu}
       renderItem={({item,index})=>(
-        <TouchableOpacity style={{display:'flex',flexDirection:'row',
-        alignItems:'center',gap:10,marginBottom:40,
-        paddingHorizontal:80,
+        <TouchableOpacity onPress={()=>handleProfileItemClick(item.action)} style={{display:'flex',flexDirection:'row',
+        alignItems:'center',gap:5,marginBottom:20,
+        paddingHorizontal:30,
         }}>
-          <Ionicons name={item.icon} size={35} color={Colors.PRIMARY} />
+          <Ionicons name={item.icon} size={25} color={Colors.PRIMARY} />
           <Text style={{fontFamily:'outfit',
-        fontSize:20,}}>{item.name}</Text>
+           fontSize:20,}}>{item.name}</Text>
         </TouchableOpacity>
       )}
       />
     </View>
+    <Modal
+    animationType='slide'
+    visible={openEditProfileModal}
+    >
+      <EditUserProfile 
+      businessId={1}
+      hideModal={()=>setOpenEditProfileModal(false)}/>
+    </Modal>
+    <Modal
+    animationType='slide'
+    visible={openEditAddressModal}
+    >
+      <EditUserAddress 
+      businessId={1}
+      hideModal={()=>setOpenEditAddressModal(false)}/>
+    </Modal>
+
     </View>
   )
 }
