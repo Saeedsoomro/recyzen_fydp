@@ -5,16 +5,36 @@ import BusinessListItem from "./BusinessListItem";
 import Colors from "../../Utils/Colors";
 import PageHeading from "../../Components/PageHeading";
 import axios from "axios";
+import { backendUrl } from "../../../config";
 
 export default function BusinessListByCategoryScreen() {
   const { params } = useRoute();
   const navigation = useNavigation();
   const { category } = params;
-  console.log("category is ", category);
 
   const [businessList, setBusinessList] = useState([]);
 
-  console.log("scrappers", businessList);
+  function getBusinessList() {
+    if (category) {
+      axios
+        .get(`${backendUrl}/api/UserMangement/get_ScrapperByCategory`, {
+          params: {
+            CategoryID: category.id,
+          },
+        })
+        .then((response) => {
+          setBusinessList(response.data);
+          console.log(category.id);
+        })
+        .catch((error) => {
+          console.warn(error);
+        });
+    }
+  }
+
+  useEffect(() => {
+    getBusinessList();
+  }, [category]);
 
   return (
     <View style={{ padding: 20, paddingTop: 30 }}>
