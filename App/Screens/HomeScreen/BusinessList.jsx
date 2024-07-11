@@ -1,4 +1,10 @@
-import { View, Text, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import Heading from "../../Components/Heading";
 import GlobalApi from "../../Utils/GlobalApi";
@@ -52,21 +58,19 @@ export default function BusinessList() {
       ],
     },
   ]);
-  // useEffect(() => {
-  //   getBusinessList();
-  // }, []);
+  const [loading, setLoading] = useState(true);
+  if (loading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator
+          size="large"
+          color="#9f5bff"
+          style={{ transform: [{ scale: 1.5 }] }}
+        />
+      </View>
+    );
+  }
 
-  /**
-   * Get Business List from API
-   */
-  // const getBusinessList = () => {
-  //   GlobalApi.getBusinessList().then((resp) => {
-  //     console.log(resp);
-  //     setBusinessList(resp.businessLists);
-  //   });
-  // };
-
-  console.log(businessList);
   return (
     <View style={{ marginTop: 20 }}>
       <Heading text={"Scrap Collectors"} isViewAll={true} />
@@ -84,3 +88,11 @@ export default function BusinessList() {
     </View>
   );
 }
+const styles = StyleSheet.create({
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 30,
+  },
+});
