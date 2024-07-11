@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import Heading from "../../Components/Heading";
 import GlobalApi from "../../Utils/GlobalApi";
 import BusinessListItemSmall from "./BusinessListItemSmall";
+import axios from "axios";
+import { backendUrl } from "../../../config";
 
 export default function BusinessList() {
   const [businessList, setBusinessList] = useState([
@@ -52,21 +54,27 @@ export default function BusinessList() {
       ],
     },
   ]);
-  // useEffect(() => {
-  //   getBusinessList();
-  // }, []);
+
+  const getBusinessList = () => {
+    axios
+      .get(`${backendUrl}/api/UserMangement/get_AllScrapper`)
+      .then((response) => {
+        console.log(response.data);
+        setBusinessList(response.data);
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  };
+
+  useEffect(() => {
+    getBusinessList();
+  }, []);
 
   /**
    * Get Business List from API
    */
-  // const getBusinessList = () => {
-  //   GlobalApi.getBusinessList().then((resp) => {
-  //     console.log(resp);
-  //     setBusinessList(resp.businessLists);
-  //   });
-  // };
 
-  console.log(businessList);
   return (
     <View style={{ marginTop: 20 }}>
       <Heading text={"Scrap Collectors"} isViewAll={true} />
