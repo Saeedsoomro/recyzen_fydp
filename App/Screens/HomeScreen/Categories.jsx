@@ -11,38 +11,29 @@ import GlobalApi from "../../Utils/GlobalApi";
 import Heading from "../../Components/Heading";
 import Colors from "../../Utils/Colors";
 import { useNavigation } from "@react-navigation/native";
+import { backendUrl } from "../../../config";
 export default function Categories() {
-  const [categories, setCategories] = useState([
-    {
-      icon: { url: require("../../images/electronic_recyzen.png") },
-      name: "Electronics",
-    },
-    {
-      icon: { url: require("../../images/metal_recyzen.png") },
-      name: "Metal",
-    },
-    {
-      icon: { url: require("../../images/paper_recyzen.png") },
-      name: "Paper",
-    },
-    {
-      icon: { url: require("../../images/plastic_recyzen.png") },
-      name: "Plastic",
-    },
-  ]);
+  const [categories, setCategories] = useState([]);
   const navigation = useNavigation();
-  // useEffect(() => {
-  //   getCategories();
-  // }, []);
-  /**
-   * Get Categories List
-   */
-  // const getCategories = () => {
-  //   GlobalApi.getCategories().then((resp) => {
-  //     setCategories(resp?.categories);
-  //   });
-  // };
-  console.log(categories);
+
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const response = await fetch(`${backendUrl}/api/MstCategory`);
+        const data = await response.json();
+        if (response.ok) {
+          setCategories(data);
+          // console.log(data);
+        }
+      } catch (error) {
+        console.log("Error showing accepted friends", error);
+      }
+    };
+    getCategories();
+  }, []);
+
+  // /api/MstCategory
+  // console.log(categories);
   return (
     <View style={{ marginTop: 10 }}>
       <Heading text={"Categories"} isViewAll={true} />
@@ -55,18 +46,18 @@ export default function Categories() {
               style={styles.container}
               onPress={() =>
                 navigation.push("business-list", {
-                  category: item.name,
+                  category: item,
                 })
               }
             >
               <View style={styles.iconContainer}>
                 <Image
-                  source={item?.icon?.url}
+                  source={{ uri: item?.image }}
                   style={{ width: 30, height: 30 }}
                 />
               </View>
               <Text style={{ fontFamily: "outfit-medium", marginTop: 5 }}>
-                {item?.name}
+                {item?.title}
               </Text>
             </TouchableOpacity>
           )

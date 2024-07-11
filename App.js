@@ -33,7 +33,7 @@ export default function App() {
               component={SignUpScreen}
               options={{ headerShown: false }}
             />
-            <Stack.Screen name="MainApp" component={TabNavigation} />
+            <Stack.Screen name="home" component={TabNavigation} />
           </Stack.Navigator>
           {/* Sign In Component  */}
           {/* <SignedIn>
