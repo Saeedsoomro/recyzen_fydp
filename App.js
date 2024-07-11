@@ -36,17 +36,12 @@ export default function App() {
               options={{ headerShown: false }}
             />
 
-            <Stack.Screen name="home" component={TabNavigation} />
+            <Stack.Screen
+              name="home"
+              component={TabNavigation}
+              options={{ headerShown: false }}
+            />
           </Stack.Navigator>
-          {/* Sign In Component  */}
-          {/* <SignedIn>
-            <TabNavigation />
-          </SignedIn> */}
-          {/* SignOut  */}
-          {/* <SignedOut>
-            <Login />
-            <SignInScreen />
-          </SignedOut> */}
           <StatusBar style="auto" />
         </NavigationContainer>
       </View>

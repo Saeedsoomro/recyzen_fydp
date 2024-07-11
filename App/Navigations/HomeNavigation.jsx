@@ -17,17 +17,6 @@ export default function HomeNavigation() {
         headerShown: false,
       }}
     >
-      {/* <Stack.Screen
-        name="signin"
-        component={SignInScreen}
-        options={{ headerShown: false }}
-      /> */}
-
-      {/* <Stack.Screen
-        name="signup"
-        component={SignUpScreen}
-        options={{ headerShown: false }}
-      /> */}
       <Stack.Screen name="home" component={HomeScreen} />
       <Stack.Screen
         name="CustomerManagement"

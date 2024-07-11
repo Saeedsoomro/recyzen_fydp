@@ -8,6 +8,8 @@ import { FontAwesome } from "@expo/vector-icons";
 import Colors from "../Utils/Colors";
 import HomeNavigation from "./HomeNavigation";
 import BookingNavigation from "./BookingNavigation";
+import ScrapPriceScreen from "../Screens/PriceScreen/ScrapPriceScreen";
+
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigation() {
@@ -43,6 +45,20 @@ export default function TabNavigation() {
           ),
           tabBarIcon: ({ color, size }) => (
             <FontAwesome name="bookmark" size={size} color={color} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="price"
+        component={ScrapPriceScreen} // Add the new screen here
+        options={{
+          tabBarLabel: ({ color }) => (
+            <Text style={{ color: color, fontSize: 12, marginTop: -7 }}>
+              Price
+            </Text>
+          ),
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome name="rupee" size={size} color={color} />
           ),
         }}
       />
