@@ -41,8 +41,7 @@ const SignInScreen = () => {
       username: email,
       password: password,
     };
-
-    navigation.navigate("home");
+    navigation.replace("home");
 
     // axios
     //   .post(`${backendUrl}/api/UserMangement/Login`, user)
@@ -53,13 +52,12 @@ const SignInScreen = () => {
     //     // it takes a key and value
     //     // AsyncStorage.setItem("authToken", token);
     //     // when we do not want to go back to the previous screen then instead of navigate we use replace
-    //     navigation.navigate("home");
+    //     // navigation.replace("home");
     //   })
     //   .catch((err) => {
     //     Alert.alert("Login Error", "Invalid Email or Password");
     //     console.log("Login Error", err);
     //   });
-    // console.log("logged in");
   };
   return (
     <View

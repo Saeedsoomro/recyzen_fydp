@@ -10,6 +10,8 @@ import SignInScreen from "./App/Screens/LoginScreen/SignInScreen";
 import SignUpScreen from "./App/Screens/LoginScreen/SignUpScreen";
 // import SignIn from "./App/Screens/LoginScreen/SignIn";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import HomeScreen from "./App/Screens/HomeScreen/HomeScreen";
+import Toast from "react-native-toast-message";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -33,6 +35,7 @@ export default function App() {
               component={SignUpScreen}
               options={{ headerShown: false }}
             />
+
             <Stack.Screen name="home" component={TabNavigation} />
           </Stack.Navigator>
           {/* Sign In Component  */}

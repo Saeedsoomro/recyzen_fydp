@@ -1,5 +1,5 @@
 import { View, Text, Image, Modal } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { useUser } from "@clerk/clerk-expo";
 import Colors from "./../../Utils/Colors";
@@ -7,9 +7,13 @@ import { FlatList } from "react-native";
 import { TouchableOpacity } from "react-native";
 import EditUserProfile from "./EditUserProfile";
 import EditUserAddress from "./EditUserAddress";
+import axios from "axios";
+import { backendUrl } from "../../../config";
 export default function ProfileScreen() {
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false);
   const [openEditAddressModal, setOpenEditAddressModal] = useState(false);
+  const [loggedUser, setLoggedUser] = useState(null);
+
   const { user } = useUser();
   const profileMenu = [
     {
@@ -59,6 +63,27 @@ export default function ProfileScreen() {
       setOpenEditAddressModal(true);
     }
   }
+
+  function getUser() {
+    const userId = 1;
+    axios
+      .get(`${backendUrl}/api/UserMangement/get_UserById`, {
+        params: {
+          userId: userId,
+        },
+      })
+      .then((response) => {
+        setLoggedUser(response.data);
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  }
+
+  useEffect(() => {
+    getUser();
+  }, []);
+
   return (
     <View>
       <View
@@ -83,7 +108,7 @@ export default function ProfileScreen() {
         >
           <Image
             source={{
-              uri: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjNNYd6kjkJlYJPePTw5WE15gj06INUBU5aQ&s",
+              uri: `${loggedUser?.profileImage}`,
             }}
             style={{ width: 90, height: 90, borderRadius: 99 }}
           />
@@ -95,7 +120,7 @@ export default function ProfileScreen() {
               color: Colors.WHITE,
             }}
           >
-            Abdul Wahid
+            {loggedUser?.firstName + " " + loggedUser?.lastName}
           </Text>
           <Text
             style={{
@@ -135,8 +160,10 @@ export default function ProfileScreen() {
       </View>
       <Modal animationType="slide" visible={openEditProfileModal}>
         <EditUserProfile
+          getUser={getUser}
           businessId={1}
           hideModal={() => setOpenEditProfileModal(false)}
+          loggedUser={loggedUser}
         />
       </Modal>
       <Modal animationType="slide" visible={openEditAddressModal}>
