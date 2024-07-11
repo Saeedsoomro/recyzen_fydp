@@ -6,6 +6,8 @@ import BusinessListByCategoryScreen from "../Screens/BusinesListByCategoryScreen
 import BusinessDetailsScreen from "../Screens/BusinessDetailsScreen/BusinessDetailsScreen";
 import SignInScreen from "../Screens/LoginScreen/SignInScreen";
 import SignUpScreen from "../Screens/LoginScreen/SignUpScreen";
+import CustomerManagementScreen from "../Screens/CustomerMangementScreen/CustomerMangementScreen";
+import CustomersEditingDeletingScreen from "../Screens/CustomerMangementScreen/CustomerEditingDeleting";
 
 const Stack = createStackNavigator();
 export default function HomeNavigation() {
@@ -15,18 +17,26 @@ export default function HomeNavigation() {
         headerShown: false,
       }}
     >
-      <Stack.Screen
+      {/* <Stack.Screen
         name="signin"
         component={SignInScreen}
         options={{ headerShown: false }}
-      />
+      /> */}
 
-      <Stack.Screen
+      {/* <Stack.Screen
         name="signup"
         component={SignUpScreen}
         options={{ headerShown: false }}
-      />
+      /> */}
       <Stack.Screen name="home" component={HomeScreen} />
+      <Stack.Screen
+        name="CustomerManagement"
+        component={CustomerManagementScreen}
+      />
+      <Stack.Screen
+        name="CustomersEditingDeletingScreen"
+        component={CustomersEditingDeletingScreen}
+      />
       <Stack.Screen
         name="business-list"
         component={BusinessListByCategoryScreen}

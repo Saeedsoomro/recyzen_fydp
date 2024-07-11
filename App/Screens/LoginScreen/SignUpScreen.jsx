@@ -9,46 +9,52 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-// import axios from "axios";
-// import { backendUrl } from "../config";
+import axios from "axios";
+import { backendUrl } from "../../../config";
 import Colors from "../../Utils/Colors";
 
 const SignUpScreen = () => {
-  const [email, setEmail] = useState("");
+  const [username, setUserName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [image, setImage] = useState("");
+  const [roles, setRoles] = useState("");
   const navigation = useNavigation();
 
   const handleRegister = () => {
     console.log("signup");
-    // const user = {
-    //   name: name,
-    //   email: email,
-    //   password: password,
-    //   image: image,
-    // };
+    const user = {
+      username: username,
+      phoneNumber: phoneNumber,
+      firstName: firstName,
+      lastName: lastName,
+      password: password,
+      roles: "user",
+    };
     // // send the POST request to backend Api to register user
-    // axios
-    //   .post(`${backendUrl}/register`, user)
-    //   .then((response) => {
-    //     // console.log(response);
-    //     Alert.alert(
-    //       "Registeration successful",
-    //       "You have been registered successfully"
-    //     );
-    //     setName("");
-    //     setEmail("");
-    //     setPassword("");
-    //     setImage("");
-    //   })
-    //   .catch((err) => {
-    //     console.log("Registeration failed", err);
-    //     Alert.alert(
-    //       "Registeration Error",
-    //       "An error occured while registering"
-    //     );
-    //   });
+    axios
+      .post(`${backendUrl}/api/UserMangement/Register`, user)
+      .then((response) => {
+        console.log(response.data);
+        Alert.alert(
+          "Registeration successful",
+          "You have been registered successfully"
+        );
+        setUserName("");
+        setPhoneNumber("");
+        setFirstName("");
+        setLastName("");
+        setPassword("");
+        navigation.replace("signin");
+      })
+      .catch((err) => {
+        console.log("Registeration failed", err);
+        Alert.alert(
+          "Registeration Error",
+          "An error occured while registering"
+        );
+      });
   };
   return (
     <View
@@ -79,41 +85,81 @@ const SignUpScreen = () => {
         <View style={{ marginTop: 50 }}>
           <View>
             <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
-              Name
+              User Name
             </Text>
             <TextInput
-              placeholder="Enter Your Name"
+              placeholder="Enter Your Email"
               placeholderTextColor={"black"}
-              value={name}
+              value={username}
               onChangeText={(text) => {
-                setName(text);
+                setUserName(text);
               }}
               style={{
                 borderBottomColor: "gray",
                 borderBottomWidth: 1,
                 marginVertical: 10,
                 width: 300,
-                fontSize: name ? 18 : 18,
+                fontSize: username ? 18 : 18,
               }}
             />
           </View>
           <View style={{ marginTop: 10 }}>
             <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
-              Email
+              Phone Number
             </Text>
             <TextInput
-              placeholder="Enter Your Email"
+              placeholder="Enter Your Phone Number"
               placeholderTextColor={"black"}
-              value={email}
+              value={phoneNumber}
               onChangeText={(text) => {
-                setEmail(text);
+                setPhoneNumber(text);
               }}
               style={{
                 borderBottomColor: "gray",
                 borderBottomWidth: 1,
                 marginVertical: 10,
                 width: 300,
-                fontSize: email ? 18 : 18,
+                fontSize: phoneNumber ? 18 : 18,
+              }}
+            />
+          </View>
+          <View style={{ marginTop: 10 }}>
+            <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
+              First Name
+            </Text>
+            <TextInput
+              placeholder="Enter Your First Name"
+              placeholderTextColor={"black"}
+              value={firstName}
+              onChangeText={(text) => {
+                setFirstName(text);
+              }}
+              style={{
+                borderBottomColor: "gray",
+                borderBottomWidth: 1,
+                marginVertical: 10,
+                width: 300,
+                fontSize: firstName ? 18 : 18,
+              }}
+            />
+          </View>
+          <View style={{ marginTop: 10 }}>
+            <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
+              Last Name
+            </Text>
+            <TextInput
+              placeholder="Enter Your Last Name"
+              placeholderTextColor={"black"}
+              value={lastName}
+              onChangeText={(text) => {
+                setLastName(text);
+              }}
+              style={{
+                borderBottomColor: "gray",
+                borderBottomWidth: 1,
+                marginVertical: 10,
+                width: 300,
+                fontSize: lastName ? 18 : 18,
               }}
             />
           </View>
@@ -136,26 +182,6 @@ const SignUpScreen = () => {
               marginVertical: 10,
               width: 300,
               fontSize: password ? 18 : 18,
-            }}
-          />
-        </View>
-        <View style={{ marginTop: 10 }}>
-          <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
-            Image
-          </Text>
-          <TextInput
-            placeholder="Image"
-            placeholderTextColor={"black"}
-            value={image}
-            onChangeText={(text) => {
-              setImage(text);
-            }}
-            style={{
-              borderBottomColor: "gray",
-              borderBottomWidth: 1,
-              marginVertical: 10,
-              width: 300,
-              fontSize: image ? 18 : 18,
             }}
           />
         </View>

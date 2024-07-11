@@ -6,7 +6,12 @@ import { NavigationContainer } from "@react-navigation/native";
 import TabNavigation from "./App/Navigations/TabNavigation";
 import { useFonts } from "expo-font";
 import SignIn from "./App/Screens/LoginScreen/SignInScreen";
+import SignInScreen from "./App/Screens/LoginScreen/SignInScreen";
+import SignUpScreen from "./App/Screens/LoginScreen/SignUpScreen";
 // import SignIn from "./App/Screens/LoginScreen/SignIn";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+const Stack = createNativeStackNavigator();
 export default function App() {
   const [fontsLoaded] = useFonts({
     outfit: require("./assets/fonts/Outfit-Regular.ttf"),
@@ -17,14 +22,28 @@ export default function App() {
     <ClerkProvider publishableKey="pk_test_ZGVsaWNhdGUtaGVycmluZy0wLmNsZXJrLmFjY291bnRzLmRldiQ">
       <View style={styles.container}>
         <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="signin"
+              component={SignInScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="signup"
+              component={SignUpScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="MainApp" component={TabNavigation} />
+          </Stack.Navigator>
           {/* Sign In Component  */}
-          <SignedIn>
+          {/* <SignedIn>
             <TabNavigation />
-          </SignedIn>
+          </SignedIn> */}
           {/* SignOut  */}
-          <SignedOut>
+          {/* <SignedOut>
             <Login />
-          </SignedOut>
+            <SignInScreen />
+          </SignedOut> */}
           <StatusBar style="auto" />
         </NavigationContainer>
       </View>

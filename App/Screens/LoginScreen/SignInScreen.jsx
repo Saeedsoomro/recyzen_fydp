@@ -12,8 +12,8 @@ import { useNavigation } from "@react-navigation/native";
 import Colors from "../../Utils/Colors";
 
 // import AsyncStorage from "@react-native-async-storage/async-storage";
-// import axios from "axios";
-// import { backendUrl } from "../config";
+import axios from "axios";
+import { backendUrl } from "../../../config";
 
 const SignInScreen = () => {
   const [email, setEmail] = useState("");
@@ -37,26 +37,26 @@ const SignInScreen = () => {
   // }, []);
 
   const handleLogin = () => {
-    navigation.navigate("home");
-    // const user = {
-    //   email: email,
-    //   password: password,
-    // };
+    const user = {
+      username: email,
+      password: password,
+    };
 
-    // axios
-    //   .post(`${backendUrl}/login`, user)
-    //   .then((response) => {
-    //     // console.log(response);
-    //     const token = response.data.token;
-    //     // it takes a key and value
-    //     AsyncStorage.setItem("authToken", token);
-    //     // when we do not want to go back to the previous screen then instead of navigate we use replace
-    //     navigation.replace("Home");
-    //   })
-    //   .catch((err) => {
-    //     Alert.alert("Login Error", "Invalid Email or Password");
-    //     console.log("Login Error", err);
-    //   });
+    axios
+      .post(`${backendUrl}/api/UserMangement/Login`, user)
+      .then((response) => {
+        // console.log(response);
+        // const token = response.data.token;
+        console.log(response.data);
+        // it takes a key and value
+        // AsyncStorage.setItem("authToken", token);
+        // when we do not want to go back to the previous screen then instead of navigate we use replace
+        // navigation.replace("home");
+      })
+      .catch((err) => {
+        Alert.alert("Login Error", "Invalid Email or Password");
+        console.log("Login Error", err);
+      });
     console.log("logged in");
   };
   return (
