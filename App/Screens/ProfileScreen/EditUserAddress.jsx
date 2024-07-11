@@ -1,197 +1,268 @@
-import { View, Text, TouchableOpacity, StyleSheet, KeyboardAvoidingView, ToastAndroid, Modal } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import PageHeading from '../../Components/PageHeading'
-import { Ionicons } from '@expo/vector-icons';
-import CalendarPicker from 'react-native-calendar-picker';
-import Colors from '../../Utils/Colors';
-import Heading from '../../Components/Heading';
-import { FlatList } from 'react-native';
-import { TextInput } from 'react-native';
-import { ScrollView } from 'react-native';
-import GlobalApi from '../../Utils/GlobalApi';
-import { useUser } from '@clerk/clerk-expo';
-import moment from 'moment';
-export default function EditUserAddress({businessId,hideModal}) {
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  KeyboardAvoidingView,
+  ToastAndroid,
+  Modal,
+  ActivityIndicator,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import PageHeading from "../../Components/PageHeading";
+import { Ionicons } from "@expo/vector-icons";
+import CalendarPicker from "react-native-calendar-picker";
+import Colors from "../../Utils/Colors";
+import Heading from "../../Components/Heading";
+import { FlatList } from "react-native";
+import { TextInput } from "react-native";
+import { ScrollView } from "react-native";
+import GlobalApi from "../../Utils/GlobalApi";
+import { useUser } from "@clerk/clerk-expo";
+import moment from "moment";
+import { backendUrl } from "../../../config";
+import axios from "axios";
+export default function EditUserAddress({ businessId, hideModal }) {
+  const [streetName, setStreetName] = useState("");
+  const [streetNumber, setStreetNumber] = useState("");
+  const [floorUnit, setFloorUnit] = useState("");
+  const [postalCode, setPostalCode] = useState("");
+  const [city, setCity] = useState("");
+  const [state, setState] = useState("");
+  const [loading, setLoading] = useState(false);
 
-    const [streetName, setStreetName] = useState('');
-    const [streetNumber, setStreetNumber] = useState('');
-    const [floorUnit, setFloorUnit] = useState('');
-    const [postalCode, setPostalCode] = useState('');
-    const [city, setCity] = useState('');
-    const [state, setState] = useState('');
-  
+  const [timeList, setTimeList] = useState();
+  const [selectedTime, setSelectedTime] = useState();
+  const [selectedDate, setSelectedDate] = useState();
+  const [note, setNote] = useState();
+  const [showAddressModal, setShowAdressModal] = useState(false);
 
-    const [timeList,setTimeList]=useState();
-    const [selectedTime,setSelectedTime]=useState();
-    const [selectedDate,setSelectedDate]=useState();
-    const [note,setNote]=useState();
-    const [showAddressModal, setShowAdressModal] = useState(false)
+  const { user } = useUser();
+  useEffect(() => {
+    getTime();
+  }, []);
 
-    const {user}=useUser();
-    useEffect(()=>{
-        getTime();
-    },[])
+  const getTime = () => {
+    const timeList = [];
+    for (let i = 8; i <= 12; i++) {
+      timeList.push({
+        time: i + ":00 AM",
+      });
+      timeList.push({
+        time: i + ":30 AM",
+      });
+    }
+    for (let i = 1; i <= 7; i++) {
+      timeList.push({
+        time: i + ":00 PM",
+      });
+      timeList.push({
+        time: i + ":30 PM",
+      });
+    }
+    setTimeList(timeList);
+  };
 
-    const getTime=()=>{
-        const timeList=[];
-        for(let i=8;i<=12;i++)
-        {
-            timeList.push({
-                time:i+':00 AM'
-            })
-            timeList.push({
-                time:i+':30 AM'
-            })
-        }
-        for(let i=1;i<=7;i++)
-        {
-            timeList.push({
-                time:i+':00 PM'
-            })
-            timeList.push({
-                time:i+':30 PM'
-            })
-        }
-        setTimeList(timeList);
+  // Create Booking Method
+  const createNewBooking = () => {
+    if (!selectedTime || !selectedDate) {
+      ToastAndroid.show("Please select Date and Time ", ToastAndroid.LONG);
+
+      return;
+    }
+    const data = {
+      userName: user?.fullName,
+      userEmail: user?.primaryEmailAddress.emailAddress,
+      time: selectedTime,
+      date: moment(selectedDate).format("DD-MMM-yyyy"),
+      businessId: businessId,
+    };
+
+    GlobalApi.createBooking(data).then((resp) => {
+      console.log("Resp", resp);
+      ToastAndroid.show("Booking Created Successfully!", ToastAndroid.LONG);
+      hideModal();
+    });
+  };
+
+  function handleUpdateAddress() {
+    if (
+      streetName === "" ||
+      streetNumber === "" ||
+      city === "" ||
+      postalCode === "" ||
+      state === "" ||
+      floorUnit === ""
+    ) {
+      ToastAndroid.show("Please fill all the fields!", ToastAndroid.SHORT);
+      return;
     }
 
-    // Create Booking Method 
-    const createNewBooking=()=>{
-        if(!selectedTime||!selectedDate)
-        {
-            ToastAndroid.show('Please select Date and Time ',ToastAndroid.LONG)
+    const userId = 1;
+    const formData = {
+      userId: userId,
+      streetName: streetName,
+      city: city,
+      postalCode: postalCode,
+      state: state,
+      number: streetNumber,
+      floorUnit: floorUnit,
+    };
+    setLoading(true);
+    axios
+      .put(`${backendUrl}/api/UserMangement/set_Address`, formData)
+      .then((response) => {
+        getAddress();
+        setLoading(false);
+        ToastAndroid.show("User Address has been updated!", ToastAndroid.SHORT);
+      })
+      .catch((error) => {
+        setLoading(true);
+        console.warn(error);
+      });
+  }
 
-            return ;
-        }
-        const data={
-            userName:user?.fullName,
-            userEmail:user?.primaryEmailAddress.emailAddress,
-            time:selectedTime,
-            date:moment(selectedDate).format('DD-MMM-yyyy'),
-            businessId:businessId
-        }
+  function getAddress() {
+    const userId = 1;
+    axios
+      .get(`${backendUrl}/api/UserMangement/get_Address`, {
+        params: {
+          userId: userId,
+        },
+      })
+      .then((response) => {
+        setStreetName(response.data.streetName);
+        setCity(response.data.city);
+        setPostalCode(response.data.postalCode);
+        setState(response.data.state);
+        setStreetNumber(response.data.number);
+        setFloorUnit(response.data.floorUnit);
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  }
 
-    
-        GlobalApi.createBooking(data).then(resp=>{
-            console.log("Resp",resp);
-            ToastAndroid.show('Booking Created Successfully!',ToastAndroid.LONG)
-            hideModal();
-        })
-    }
+  useEffect(() => {
+    getAddress();
+  }, []);
 
-   
   return (
     <ScrollView>
-    <KeyboardAvoidingView style={{padding:20}}>
-       <TouchableOpacity style={{display:'flex',flexDirection:'row',gap:10,
-    alignItems:'center',marginBottom:20}}
-      onPress={()=>hideModal()}
-    >
-        <Ionicons name="arrow-back-outline" size={30} color="black" />
-        <Text style={{fontSize:25,fontFamily:'outfit-medium'}}>
-            Edit Address</Text>
-      </TouchableOpacity>
-      
-      {/* Calender Section  */}
-      <Heading text={'Adress Detials'} />
-      <View style={styles.calenderContainer}>
-        <TextInput
+      <KeyboardAvoidingView style={{ padding: 20 }}>
+        <TouchableOpacity
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            gap: 10,
+            alignItems: "center",
+            marginBottom: 20,
+          }}
+          onPress={() => hideModal()}
+        >
+          <Ionicons name="arrow-back-outline" size={30} color="black" />
+          <Text style={{ fontSize: 25, fontFamily: "outfit-medium" }}>
+            Edit Address
+          </Text>
+        </TouchableOpacity>
+
+        {/* Calender Section  */}
+        <Heading text={"Adress Detials"} />
+        <View style={styles.calenderContainer}>
+          <TextInput
             placeholder="Street Name"
             value={streetName}
             onChangeText={setStreetName}
             style={styles.noteTextArea}
-        />
-        <TextInput
+          />
+          <TextInput
             placeholder="Number"
             value={streetNumber}
             onChangeText={setStreetNumber}
             style={styles.noteTextArea}
-        />
-        <TextInput
+          />
+          <TextInput
             placeholder="Floor Unit"
             value={floorUnit}
             onChangeText={setFloorUnit}
             style={styles.noteTextArea}
-        />
-        <TextInput
+          />
+          <TextInput
             placeholder="Postal Code"
             value={postalCode}
             onChangeText={setPostalCode}
             style={styles.noteTextArea}
-        />
-        <TextInput
+          />
+          <TextInput
             placeholder="City"
             value={city}
             onChangeText={setCity}
             style={styles.noteTextArea}
-        />
-        <TextInput
+          />
+          <TextInput
             placeholder="State"
             value={state}
             onChangeText={setState}
             style={styles.noteTextArea}
-        />
-      
-      </View>
+          />
+        </View>
 
-
-      {/* confirmation Button  */}
-      <TouchableOpacity style={{marginTop:15}}
-      onPress={()=>createNewBooking()}>
-        <Text style={styles.confirmBtn}
-        
-        >Save</Text>
-      </TouchableOpacity>
-    </KeyboardAvoidingView>
-
-
+        {/* confirmation Button  */}
+        <TouchableOpacity
+          style={{ marginTop: 15 }}
+          onPress={handleUpdateAddress}
+        >
+          <Text style={styles.confirmBtn}>
+            {" "}
+            {loading ? <ActivityIndicator color="white" /> : "Save"}
+          </Text>
+        </TouchableOpacity>
+      </KeyboardAvoidingView>
     </ScrollView>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
-    calenderContainer:{
-        backgroundColor:Colors.PRIMARY_LIGHT,
-        padding:20,
-        borderRadius:15
-    },
-    selectedTime:{
-        padding:10,
-        borderWidth:1,
-        borderColor:Colors.PRIMARY,
-        borderRadius:99,
-        paddingHorizontal:18,
-        backgroundColor:Colors.PRIMARY,
-        color:Colors.WHITE
-    },
-    unSelectedTime:{
-        padding:10,
-        borderWidth:1,
-        borderColor:Colors.PRIMARY,
-        borderRadius:99,
-        paddingHorizontal:18,
-        color:Colors.PRIMARY
-
-    },
-    noteTextArea:{
-        borderWidth:1,
-        marginVertical:10,
-        borderRadius:15,
-        textAlignVertical:'top',
-        padding:10,
-        fontSize:16,
-        fontFamily:'outfit',
-        borderColor:Colors.PRIMARY
-    },
-    confirmBtn:{
-        textAlign:'center',
-        fontFamily:'outfit-medium',
-        fontSize:17,
-        backgroundColor:Colors.PRIMARY,
-        color:Colors.WHITE,
-        padding:13,
-        borderRadius:99,
-        elevation:2,
-        
-    }
-})
+  calenderContainer: {
+    backgroundColor: Colors.PRIMARY_LIGHT,
+    padding: 20,
+    borderRadius: 15,
+  },
+  selectedTime: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: Colors.PRIMARY,
+    borderRadius: 99,
+    paddingHorizontal: 18,
+    backgroundColor: Colors.PRIMARY,
+    color: Colors.WHITE,
+  },
+  unSelectedTime: {
+    padding: 10,
+    borderWidth: 1,
+    borderColor: Colors.PRIMARY,
+    borderRadius: 99,
+    paddingHorizontal: 18,
+    color: Colors.PRIMARY,
+  },
+  noteTextArea: {
+    borderWidth: 1,
+    marginVertical: 10,
+    borderRadius: 15,
+    textAlignVertical: "top",
+    padding: 10,
+    fontSize: 16,
+    fontFamily: "outfit",
+    borderColor: Colors.PRIMARY,
+  },
+  confirmBtn: {
+    textAlign: "center",
+    fontFamily: "outfit-medium",
+    fontSize: 17,
+    backgroundColor: Colors.PRIMARY,
+    color: Colors.WHITE,
+    padding: 13,
+    borderRadius: 99,
+    elevation: 2,
+  },
+});

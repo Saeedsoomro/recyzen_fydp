@@ -41,23 +41,23 @@ const SignInScreen = () => {
       username: email,
       password: password,
     };
+    navigation.replace("home");
 
-    axios
-      .post(`${backendUrl}/api/UserMangement/Login`, user)
-      .then((response) => {
-        // console.log(response);
-        // const token = response.data.token;
-        console.log(response.data);
-        // it takes a key and value
-        // AsyncStorage.setItem("authToken", token);
-        // when we do not want to go back to the previous screen then instead of navigate we use replace
-        // navigation.replace("home");
-      })
-      .catch((err) => {
-        Alert.alert("Login Error", "Invalid Email or Password");
-        console.log("Login Error", err);
-      });
-    console.log("logged in");
+    // axios
+    //   .post(`${backendUrl}/api/UserMangement/Login`, user)
+    //   .then((response) => {
+    //     // console.log(response);
+    //     // const token = response.data.token;
+    //     console.log(response.data);
+    //     // it takes a key and value
+    //     // AsyncStorage.setItem("authToken", token);
+    //     // when we do not want to go back to the previous screen then instead of navigate we use replace
+    //     // navigation.replace("home");
+    //   })
+    //   .catch((err) => {
+    //     Alert.alert("Login Error", "Invalid Email or Password");
+    //     console.log("Login Error", err);
+    //   });
   };
   return (
     <View
