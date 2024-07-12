@@ -41,7 +41,7 @@ const SignInScreen = () => {
       username: email,
       password: password,
     };
-    navigation.replace("home");
+    navigation.replace("scrapper-home");
 
     // axios
     //   .post(`${backendUrl}/api/UserMangement/Login`, user)

@@ -10,14 +10,14 @@ import CustomerManagementScreen from "../Screens/CustomerMangementScreen/Custome
 import CustomersEditingDeletingScreen from "../Screens/CustomerMangementScreen/CustomerEditingDeleting";
 
 const Stack = createStackNavigator();
-export default function HomeNavigation() {
+export default function ScrapperHomeNavigation() {
   return (
     <Stack.Navigator
       screenOptions={{
         headerShown: false,
       }}
     >
-      <Stack.Screen name="home" component={HomeScreen} />
+      <Stack.Screen name="home" component={CustomerManagementScreen} />
       <Stack.Screen
         name="CustomerManagement"
         component={CustomerManagementScreen}

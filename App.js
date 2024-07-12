@@ -12,6 +12,7 @@ import SignUpScreen from "./App/Screens/LoginScreen/SignUpScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "./App/Screens/HomeScreen/HomeScreen";
 import Toast from "react-native-toast-message";
+import ScrapperTabNavigation from "./App/Navigations/ScrapperTabNavigation";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -36,17 +37,17 @@ export default function App() {
               options={{ headerShown: false }}
             />
 
-            <Stack.Screen name="home" component={TabNavigation} />
+            <Stack.Screen
+              name="home"
+              component={TabNavigation}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="scrapper-home"
+              component={ScrapperTabNavigation}
+              options={{ headerShown: false }}
+            />
           </Stack.Navigator>
-          {/* Sign In Component  */}
-          {/* <SignedIn>
-            <TabNavigation />
-          </SignedIn> */}
-          {/* SignOut  */}
-          {/* <SignedOut>
-            <Login />
-            <SignInScreen />
-          </SignedOut> */}
           <StatusBar style="auto" />
         </NavigationContainer>
       </View>

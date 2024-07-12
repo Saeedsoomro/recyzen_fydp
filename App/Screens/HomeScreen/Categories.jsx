@@ -5,15 +5,17 @@ import {
   Image,
   StyleSheet,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import React, { useEffect, useState } from "react";
-import GlobalApi from "../../Utils/GlobalApi";
 import Heading from "../../Components/Heading";
 import Colors from "../../Utils/Colors";
 import { useNavigation } from "@react-navigation/native";
 import { backendUrl } from "../../../config";
+
 export default function Categories() {
   const [categories, setCategories] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -27,13 +29,24 @@ export default function Categories() {
         }
       } catch (error) {
         console.log("Error showing accepted friends", error);
+      } finally {
+        setLoading(false);
       }
     };
     getCategories();
   }, []);
 
-  // /api/MstCategory
-  // console.log(categories);
+  if (loading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator
+          size="large"
+          color={Colors.PRIMARY}
+          style={{ transform: [{ scale: 1.5 }] }}
+        />
+      </View>
+    );
+  }
   return (
     <View style={{ marginTop: 10 }}>
       <Heading text={"Categories"} isViewAll={true} />
@@ -76,5 +89,11 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.LIGHT_GRAY,
     padding: 17,
     borderRadius: 99,
+  },
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 10,
   },
 });

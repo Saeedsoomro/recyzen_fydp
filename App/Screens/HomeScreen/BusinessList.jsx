@@ -1,4 +1,10 @@
-import { View, Text, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
 import React, { useEffect, useState } from "react";
 import Heading from "../../Components/Heading";
 import GlobalApi from "../../Utils/GlobalApi";
@@ -7,6 +13,7 @@ import axios from "axios";
 import { backendUrl } from "../../../config";
 
 export default function BusinessList() {
+  const [loading, setLoading] = useState(true);
   const [businessList, setBusinessList] = useState([
     {
       id: 1,
@@ -56,13 +63,16 @@ export default function BusinessList() {
   ]);
 
   const getBusinessList = () => {
+    setLoading(true);
     axios
       .get(`${backendUrl}/api/UserMangement/get_AllScrapper`)
       .then((response) => {
+        setLoading(false);
         console.log(response.data);
         setBusinessList(response.data);
       })
       .catch((error) => {
+        setLoading(false);
         console.warn(error);
       });
   };
@@ -74,6 +84,18 @@ export default function BusinessList() {
   /**
    * Get Business List from API
    */
+
+  if (loading) {
+    return (
+      <View style={styles.loaderContainer}>
+        <ActivityIndicator
+          size="large"
+          color="#9f5bff"
+          style={{ transform: [{ scale: 1.5 }] }}
+        />
+      </View>
+    );
+  }
 
   return (
     <View style={{ marginTop: 20 }}>
@@ -92,3 +114,11 @@ export default function BusinessList() {
     </View>
   );
 }
+const styles = StyleSheet.create({
+  loaderContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 30,
+  },
+});

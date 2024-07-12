@@ -9,10 +9,12 @@ import Colors from "../Utils/Colors";
 import HomeNavigation from "./HomeNavigation";
 import BookingNavigation from "./BookingNavigation";
 import ScrapPriceScreen from "../Screens/PriceScreen/ScrapPriceScreen";
+import CustomerManagementScreen from "../Screens/CustomerMangementScreen/CustomerMangementScreen";
+import ScrapperHomeNavigation from "./ScrapperHomeNavigation";
 
 const Tab = createBottomTabNavigator();
 
-export default function TabNavigation() {
+export default function ScrapperTabNavigation() {
   return (
     <Tab.Navigator
       screenOptions={{
@@ -22,7 +24,7 @@ export default function TabNavigation() {
     >
       <Tab.Screen
         name="home"
-        component={HomeNavigation}
+        component={ScrapperHomeNavigation}
         options={{
           tabBarLabel: ({ color }) => (
             <Text style={{ color: color, fontSize: 12, marginTop: -7 }}>
@@ -34,7 +36,7 @@ export default function TabNavigation() {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="booking"
         component={BookingNavigation}
         options={{
@@ -47,7 +49,7 @@ export default function TabNavigation() {
             <FontAwesome name="bookmark" size={size} color={color} />
           ),
         }}
-      />
+      /> */}
       <Tab.Screen
         name="price"
         component={ScrapPriceScreen} // Add the new screen here

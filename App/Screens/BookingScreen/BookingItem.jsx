@@ -17,9 +17,9 @@ export default function BookingItem({ business, booking }) {
         <Text
           style={{ fontFamily: "outfit", color: Colors.GRAY, fontSize: 15 }}
         >
-          {booking?.userScheduledTo.firstName +
+          {booking?.userScheduledTo?.firstName +
             " " +
-            booking?.userScheduledTo.lastName}
+            booking?.userScheduledTo?.lastName}
         </Text>
         <Text style={{ fontFamily: "outfit-bold", fontSize: 19 }}>
           Scrapper
