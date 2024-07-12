@@ -1,12 +1,36 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Colors from "../../Utils/Colors";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { AntDesign } from "@expo/vector-icons";
+import { backendUrl } from "../../../config";
+import axios from "axios";
 export default function BusinessListItem({ business, booking }) {
-  console.log("category data", business);
   const navigation = useNavigation();
+  const [address, setAddress] = useState();
+
+  function getAddress() {
+    axios
+      .get(`${backendUrl}/api/UserMangement/get_Address`, {
+        params: {
+          userId: business.id,
+        },
+      })
+      .then((response) => {
+        setAddress(
+          `${response.data.streetName}, ${response.data.city},${response.data.state}`
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
+  useEffect(() => {
+    getAddress();
+  }, []);
+
   return (
     <TouchableOpacity
       style={styles.container}
@@ -16,15 +40,15 @@ export default function BusinessListItem({ business, booking }) {
         })
       }
     >
-      <Image source={{ uri: business?.images }} style={styles.image} />
+      <Image source={{ uri: business?.profileImage }} style={styles.image} />
       <View style={styles.subContaner}>
         <Text
           style={{ fontFamily: "outfit", color: Colors.GRAY, fontSize: 15 }}
         >
-          {business.name}
+          {business.firstName + " " + business.lastName}
         </Text>
         <Text style={{ fontFamily: "outfit-bold", fontSize: 19 }}>
-          {business.name}
+          {business.categoryTitle}
         </Text>
 
         {!booking?.id ? (
@@ -36,7 +60,7 @@ export default function BusinessListItem({ business, booking }) {
               size={20}
               color={Colors.PRIMARY}
             />
-            {business.address}
+            {address}
           </Text>
         ) : (
           <Text

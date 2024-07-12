@@ -9,8 +9,11 @@ import React, { useEffect, useState } from "react";
 import Heading from "../../Components/Heading";
 import GlobalApi from "../../Utils/GlobalApi";
 import BusinessListItemSmall from "./BusinessListItemSmall";
+import axios from "axios";
+import { backendUrl } from "../../../config";
 
 export default function BusinessList() {
+  const [loading, setLoading] = useState(true);
   const [businessList, setBusinessList] = useState([
     {
       id: 1,
@@ -58,7 +61,30 @@ export default function BusinessList() {
       ],
     },
   ]);
-  const [loading, setLoading] = useState(true);
+
+  const getBusinessList = () => {
+    setLoading(true);
+    axios
+      .get(`${backendUrl}/api/UserMangement/get_AllScrapper`)
+      .then((response) => {
+        setLoading(false);
+        console.log(response.data);
+        setBusinessList(response.data);
+      })
+      .catch((error) => {
+        setLoading(false);
+        console.warn(error);
+      });
+  };
+
+  useEffect(() => {
+    getBusinessList();
+  }, []);
+
+  /**
+   * Get Business List from API
+   */
+
   if (loading) {
     return (
       <View style={styles.loaderContainer}>

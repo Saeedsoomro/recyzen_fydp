@@ -16,15 +16,15 @@ export default function BusinessListItemSmall({ business }) {
         })
       }
     >
-      <Image source={{ uri: business?.images[0]?.url }} style={styles.image} />
+      <Image source={{ uri: business?.profileImage }} style={styles.image} />
       <View style={styles.infoContainer}>
         <Text style={{ fontSize: 17, fontFamily: "outfit-medium" }}>
-          {business?.name}
+          {business?.firstName + " " + business?.lastName}
         </Text>
         <Text
           style={{ fontSize: 13, fontFamily: "outfit", color: Colors.GRAY }}
         >
-          {business?.contactPerson}
+          {business?.phoneNumber}
         </Text>
         <Text
           style={{
@@ -38,7 +38,7 @@ export default function BusinessListItemSmall({ business }) {
             paddingHorizontal: 7,
           }}
         >
-          {business?.category.name}
+          {business?.categoryTitle}
         </Text>
       </View>
     </TouchableOpacity>
