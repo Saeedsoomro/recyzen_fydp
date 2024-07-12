@@ -1,5 +1,6 @@
 import {
   Alert,
+  Image,
   KeyboardAvoidingView,
   Pressable,
   StyleSheet,
@@ -61,7 +62,7 @@ const SignUpScreen = () => {
       style={{
         flex: 1,
         padding: 10,
-        backgroundColor: "white",
+        backgroundColor: Colors.PRIMARY_LIGHT,
         alignItems: "center",
       }}
     >
@@ -73,6 +74,15 @@ const SignUpScreen = () => {
             alignItems: "center",
           }}
         >
+          <Image
+            source={require("../../images/logoofrecyzen.png")}
+            style={{
+              width: 90,
+              height: 90,
+              borderRadius: 99,
+              marginVertical: 10,
+            }}
+          />
           <Text
             style={{ color: Colors.PRIMARY, fontSize: 17, fontWeight: 600 }}
           >
@@ -82,11 +92,11 @@ const SignUpScreen = () => {
             Register to Your Account
           </Text>
         </View>
-        <View style={{ marginTop: 50 }}>
+        <View style={{ marginTop: 20 }}>
           <View>
-            <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
+            {/* <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
               User Name
-            </Text>
+            </Text> */}
             <TextInput
               placeholder="Enter Your Email"
               placeholderTextColor={"black"}
@@ -94,19 +104,13 @@ const SignUpScreen = () => {
               onChangeText={(text) => {
                 setUserName(text);
               }}
-              style={{
-                borderBottomColor: "gray",
-                borderBottomWidth: 1,
-                marginVertical: 10,
-                width: 300,
-                fontSize: username ? 18 : 18,
-              }}
+              style={styles.noteTextArea}
             />
           </View>
           <View style={{ marginTop: 10 }}>
-            <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
+            {/* <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
               Phone Number
-            </Text>
+            </Text> */}
             <TextInput
               placeholder="Enter Your Phone Number"
               placeholderTextColor={"black"}
@@ -114,19 +118,13 @@ const SignUpScreen = () => {
               onChangeText={(text) => {
                 setPhoneNumber(text);
               }}
-              style={{
-                borderBottomColor: "gray",
-                borderBottomWidth: 1,
-                marginVertical: 10,
-                width: 300,
-                fontSize: phoneNumber ? 18 : 18,
-              }}
+              style={styles.noteTextArea}
             />
           </View>
           <View style={{ marginTop: 10 }}>
-            <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
+            {/* <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
               First Name
-            </Text>
+            </Text> */}
             <TextInput
               placeholder="Enter Your First Name"
               placeholderTextColor={"black"}
@@ -134,19 +132,13 @@ const SignUpScreen = () => {
               onChangeText={(text) => {
                 setFirstName(text);
               }}
-              style={{
-                borderBottomColor: "gray",
-                borderBottomWidth: 1,
-                marginVertical: 10,
-                width: 300,
-                fontSize: firstName ? 18 : 18,
-              }}
+              style={styles.noteTextArea}
             />
           </View>
           <View style={{ marginTop: 10 }}>
-            <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
+            {/* <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
               Last Name
-            </Text>
+            </Text> */}
             <TextInput
               placeholder="Enter Your Last Name"
               placeholderTextColor={"black"}
@@ -154,20 +146,14 @@ const SignUpScreen = () => {
               onChangeText={(text) => {
                 setLastName(text);
               }}
-              style={{
-                borderBottomColor: "gray",
-                borderBottomWidth: 1,
-                marginVertical: 10,
-                width: 300,
-                fontSize: lastName ? 18 : 18,
-              }}
+              style={styles.noteTextArea}
             />
           </View>
         </View>
         <View style={{ marginTop: 10 }}>
-          <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
+          {/* <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
             Password
-          </Text>
+          </Text> */}
           <TextInput
             placeholder="Enter Your Password"
             placeholderTextColor={"black"}
@@ -176,13 +162,7 @@ const SignUpScreen = () => {
               setPassword(text);
             }}
             secureTextEntry={true}
-            style={{
-              borderBottomColor: "gray",
-              borderBottomWidth: 1,
-              marginVertical: 10,
-              width: 300,
-              fontSize: password ? 18 : 18,
-            }}
+            style={styles.noteTextArea}
           />
         </View>
         <Pressable
@@ -194,7 +174,7 @@ const SignUpScreen = () => {
             padding: 15,
             backgroundColor: Colors.PRIMARY,
             borderRadius: 6,
-            marginTop: 50,
+            marginTop: 20,
           }}
         >
           <Text
@@ -225,4 +205,15 @@ const SignUpScreen = () => {
 
 export default SignUpScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  noteTextArea: {
+    borderWidth: 1,
+    marginVertical: 10,
+    borderRadius: 15,
+    padding: 10,
+    fontSize: 16,
+    fontFamily: "outfit",
+    borderColor: Colors.PRIMARY,
+    width: 300,
+  },
+});

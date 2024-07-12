@@ -1,7 +1,9 @@
 import {
   Alert,
+  Image,
   KeyboardAvoidingView,
   Pressable,
+  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -64,10 +66,14 @@ const SignInScreen = () => {
       style={{
         flex: 1,
         padding: 10,
-        backgroundColor: "white",
+        backgroundColor: Colors.PRIMARY_LIGHT,
         alignItems: "center",
       }}
     >
+      <StatusBar
+        backgroundColor={Colors.PRIMARY_LIGHT}
+        barStyle="light-content"
+      />
       <KeyboardAvoidingView>
         <View
           style={{
@@ -76,6 +82,15 @@ const SignInScreen = () => {
             alignItems: "center",
           }}
         >
+          <Image
+            source={require("../../images/logoofrecyzen.png")}
+            style={{
+              width: 90,
+              height: 90,
+              borderRadius: 99,
+              marginVertical: 10,
+            }}
+          />
           <Text
             style={{ color: Colors.PRIMARY, fontSize: 17, fontWeight: 600 }}
           >
@@ -87,9 +102,9 @@ const SignInScreen = () => {
         </View>
         <View style={{ marginTop: 50 }}>
           <View>
-            <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
+            {/* <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
               Email
-            </Text>
+            </Text> */}
             <TextInput
               placeholder="Enter Your Email"
               placeholderTextColor={"black"}
@@ -97,20 +112,14 @@ const SignInScreen = () => {
               onChangeText={(text) => {
                 setEmail(text);
               }}
-              style={{
-                borderBottomColor: "gray",
-                borderBottomWidth: 1,
-                marginVertical: 10,
-                width: 300,
-                fontSize: email ? 18 : 18,
-              }}
+              style={styles.noteTextArea}
             />
           </View>
         </View>
         <View style={{ marginTop: 10 }}>
-          <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
+          {/* <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
             Password
-          </Text>
+          </Text> */}
           <TextInput
             placeholder="Enter Your Password"
             placeholderTextColor={"black"}
@@ -119,13 +128,7 @@ const SignInScreen = () => {
               setPassword(text);
             }}
             secureTextEntry={true}
-            style={{
-              borderBottomColor: "gray",
-              borderBottomWidth: 1,
-              marginVertical: 10,
-              width: 300,
-              fontSize: password ? 18 : 18,
-            }}
+            style={styles.noteTextArea}
           />
         </View>
         <Pressable
@@ -168,4 +171,15 @@ const SignInScreen = () => {
 
 export default SignInScreen;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  noteTextArea: {
+    borderWidth: 1,
+    marginVertical: 10,
+    borderRadius: 15,
+    padding: 10,
+    fontSize: 16,
+    fontFamily: "outfit",
+    borderColor: Colors.PRIMARY,
+    width: 300,
+  },
+});
