@@ -8,6 +8,7 @@ import BusinessListItem from "./../BusinesListByCategoryScreen/BusinessListItem"
 import { backendUrl } from "../../../config";
 import axios from "axios";
 import BookingItem from "./BookingItem";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function BookingScreen() {
   const { user } = useUser();
   const [bookingList, setBookingList] = useState([
@@ -37,8 +38,10 @@ export default function BookingScreen() {
   ]);
   const [loading, setLoading] = useState(false);
 
-  function getBookings() {
-    const userId = 1;
+  async function getBookings() {
+    const user1 = await AsyncStorage.getItem("user");
+    const user = JSON.parse(user1);
+    const userId = user?.id;
     axios
       .get(`${backendUrl}/api/Bookings/get_UserBookings`, {
         params: {

@@ -22,6 +22,7 @@ import { useUser } from "@clerk/clerk-expo";
 import moment from "moment";
 import axios from "axios";
 import { backendUrl } from "../../../config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 export default function BookingAddressModal({
   businessId,
   hideModal,
@@ -67,7 +68,7 @@ export default function BookingAddressModal({
     setTimeList(timeList);
   };
 
-  function handleUpdateAddress() {
+  async function handleUpdateAddress() {
     if (
       streetName === "" ||
       streetNumber === "" ||
@@ -80,7 +81,10 @@ export default function BookingAddressModal({
       return;
     }
 
-    const userId = 1;
+    const user1 = await AsyncStorage.getItem("user");
+    const user = JSON.parse(user1);
+    const userId = user?.id;
+
     const formData = {
       userId: userId,
       streetName: streetName,
@@ -105,8 +109,10 @@ export default function BookingAddressModal({
       });
   }
 
-  function getAddress() {
-    const userId = 1;
+  async function getAddress() {
+    const user1 = await AsyncStorage.getItem("user");
+    const user = JSON.parse(user1);
+    const userId = user?.id;
     axios
       .get(`${backendUrl}/api/UserMangement/get_Address`, {
         params: {

@@ -15,6 +15,7 @@ import {
 import Colors from "../../Utils/Colors";
 import axios from "axios";
 import { backendUrl } from "../../../config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const CustomerManagementScreen = () => {
   const { user } = useUser();
@@ -107,8 +108,10 @@ const CustomerManagementScreen = () => {
     setShowOptionsModal(true);
   };
 
-  function getScrapperOrder() {
-    const userId = 1;
+  async function getScrapperOrder() {
+    const user1 = await AsyncStorage.getItem("user");
+    const user = JSON.parse(user1);
+    const userId = user?.id;
     axios
       .get(`${backendUrl}/api/Bookings/get_ScraperBookings`, {
         params: {

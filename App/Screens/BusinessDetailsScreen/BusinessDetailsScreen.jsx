@@ -18,6 +18,7 @@ import BusinessAboutMe from "./BusinessAboutMe";
 import BookingModal from "./BookingModal";
 import { backendUrl } from "../../../config";
 import axios from "axios";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function BusinessDetailsScreen() {
   const param = useRoute().params;
@@ -36,8 +37,10 @@ export default function BusinessDetailsScreen() {
     );
   };
 
-  function getAddress(id) {
-    const userId = 1;
+  async function getAddress(id) {
+    const user1 = await AsyncStorage.getItem("user");
+    const user = JSON.parse(user1);
+    const userId = user?.id;
     axios
       .get(`${backendUrl}/api/UserMangement/get_Address`, {
         params: {

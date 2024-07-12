@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 10,
     fontSize: 16,
-    fontFamily: "outfit",
+    // fontFamily: "outfit",
     borderColor: Colors.PRIMARY,
     width: 300,
   },

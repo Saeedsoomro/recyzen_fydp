@@ -24,6 +24,7 @@ import BookingAddressModal from "./BookingAddressModal";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
 import { backendUrl } from "../../../config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function BookingModal({ businessId, hideModal }) {
   const [timeList, setTimeList] = useState();
@@ -70,14 +71,17 @@ export default function BookingModal({ businessId, hideModal }) {
   };
 
   // Create Booking Method
-  const createNewBooking = () => {
+  const createNewBooking = async () => {
     if (!selectedTime || !selectedDate) {
       ToastAndroid.show("Please select Date and Time ", ToastAndroid.LONG);
 
       return;
     }
 
-    userId = 1;
+    const user1 = await AsyncStorage.getItem("user");
+    const user = JSON.parse(user1);
+    const userId = user?.id;
+
     const formData = {
       estimatedWieght: estimatedWeight,
       scheduledBy: 1,

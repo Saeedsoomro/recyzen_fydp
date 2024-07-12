@@ -9,11 +9,14 @@ import EditUserProfile from "./EditUserProfile";
 import EditUserAddress from "./EditUserAddress";
 import axios from "axios";
 import { backendUrl } from "../../../config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 export default function ProfileScreen() {
   const [openEditProfileModal, setOpenEditProfileModal] = useState(false);
   const [openEditAddressModal, setOpenEditAddressModal] = useState(false);
   const [loggedUser, setLoggedUser] = useState(null);
 
+  const navigation = useNavigation();
   const { user } = useUser();
   const profileMenu = [
     {
@@ -62,10 +65,16 @@ export default function ProfileScreen() {
     if (action === "location") {
       setOpenEditAddressModal(true);
     }
+    if (action === "logout") {
+      navigation.navigate("signin");
+    }
   }
 
-  function getUser() {
-    const userId = 1;
+  async function getUser() {
+    const user1 = await AsyncStorage.getItem("user");
+    const user = JSON.parse(user1);
+    const userId = user?.id;
+
     axios
       .get(`${backendUrl}/api/UserMangement/get_UserById`, {
         params: {

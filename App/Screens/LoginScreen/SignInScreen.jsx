@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Colors from "../../Utils/Colors";
 
-// import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { backendUrl } from "../../../config";
 
@@ -22,44 +22,53 @@ const SignInScreen = () => {
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
 
-  // useEffect(() => {
-  //   const checkLoginStatus = async () => {
-  //     try {
-  //       const token = await AsyncStorage.getItem("authToken", token);
-  //       if (token) {
-  //         navigation.replace("Home");
-  //       } else {
-  //         // token not found
-  //       }
-  //     } catch (error) {
-  //       console.log("Error:", error);
-  //     }
-  //   };
-  //   checkLoginStatus();
-  // }, []);
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const storedEmail = await AsyncStorage.getItem("email");
+        const storedPassword = await AsyncStorage.getItem("password");
+        if (storedEmail && storedPassword) {
+          const storedRole = await AsyncStorage.getItem("roleName");
+          if (storedRole === "scrapper") {
+            navigation.replace("scrapper-home");
+          } else if (storedRole === "user") {
+            navigation.replace("home");
+          }
+        }
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    };
+    checkLoginStatus();
+  }, []);
 
   const handleLogin = () => {
     const user = {
       username: email,
       password: password,
     };
-    navigation.replace("scrapper-home");
 
-    // axios
-    //   .post(`${backendUrl}/api/UserMangement/Login`, user)
-    //   .then((response) => {
-    //     // console.log(response);
-    //     // const token = response.data.token;
-    //     console.log(response.data);
-    //     // it takes a key and value
-    //     // AsyncStorage.setItem("authToken", token);
-    //     // when we do not want to go back to the previous screen then instead of navigate we use replace
-    //     // navigation.replace("home");
-    //   })
-    //   .catch((err) => {
-    //     Alert.alert("Login Error", "Invalid Email or Password");
-    //     console.log("Login Error", err);
-    //   });
+    axios
+      .post(`${backendUrl}/api/UserMangement/Login`, user)
+      .then(async (response) => {
+        console.log(response.data);
+        const { roleName } = response.data;
+        try {
+          await AsyncStorage.setItem("user", JSON.stringify(response.data));
+
+          if (response.data?.roleId === 1) {
+            navigation.replace("scrapper-home");
+          } else if (response.data?.roleId === 2) {
+            navigation.replace("home");
+          }
+        } catch (error) {
+          console.log("Error storing user data:", error);
+        }
+      })
+      .catch((err) => {
+        Alert.alert("Login Error", "Invalid Email or Password");
+        console.log("Login Error", err);
+      });
   };
   return (
     <View
@@ -100,7 +109,7 @@ const SignInScreen = () => {
             Sign In to Your Account
           </Text>
         </View>
-        <View style={{ marginTop: 50 }}>
+        <View style={{ marginTop: 20 }}>
           <View>
             {/* <Text style={{ fontWeight: 600, fontSize: 18, color: "gray" }}>
               Email
@@ -140,7 +149,7 @@ const SignInScreen = () => {
             padding: 15,
             backgroundColor: Colors.PRIMARY,
             borderRadius: 6,
-            marginTop: 50,
+            marginTop: 20,
           }}
         >
           <Text
@@ -178,7 +187,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 10,
     fontSize: 16,
-    fontFamily: "outfit",
+    // fontFamily: "outfit",
     borderColor: Colors.PRIMARY,
     width: 300,
   },
